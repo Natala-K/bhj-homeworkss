@@ -2,6 +2,11 @@ let score = 0;
 let clicks = 0;
 let lastClickTime = Date.now();
 
+const clickerCounter = document.getElementById("clicker__counter");
+const scoreDisplay = document.getElementById("score");
+const clickSpeedDisplay = document.getElementById("clickSpeed");
+const cookie = document.getElementById("cookie");
+
 function clickCookie() {
     const currentTime = Date.now();
     const timeDifference = (currentTime - lastClickTime) / 1000; // переводим в секунды
@@ -9,16 +14,18 @@ function clickCookie() {
     clicks++;
     score += clicks % 2 === 0 ? -1 : 1; // чередуем увеличение и уменьшение счётчика
 
-    console.log("Счёт: " + score);
+    // Обновляем отображение количества кликов и счёта
+    clickerCounter.textContent = clicks;
+    scoreDisplay.textContent = score;
 
     if (timeDifference > 0) {
         const clickSpeed = Math.round(1 / timeDifference * 10) / 10; // округляем до одного знака после запятой
-        console.log("Скорость клика: " + clickSpeed + " кликов в секунду");
+        // Обновляем отображение скорости кликов
+        clickSpeedDisplay.textContent = clickSpeed;
     }
 
-    clicks = 0;
     lastClickTime = currentTime;
 }
 
-// Пример вызова функции clickCookie() при клике на печеньку
-clickCookie();
+// Привязываем функцию clickCookie к клику по изображению
+cookie.addEventListener("click", clickCookie);
