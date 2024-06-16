@@ -1,4 +1,3 @@
-// Ваша текущая логика игры
 let score = 0;
 let misses = 0;
 let molesKilled = 0;
@@ -18,7 +17,7 @@ function startGame() {
                 
                 if (molesKilled >= 10) {
                     console.log("Поздравляем! Вы победили!");
-                    resetGame();
+                    resetGame('Поздравляем! Вы победили!');
                 }
             } else {
                 misses++;
@@ -27,19 +26,24 @@ function startGame() {
                 
                 if (misses >= 5) {
                     console.log("Вы проиграли! Слишком много промахов.");
-                    resetGame();
+                    resetGame('Вы проиграли! Слишком много промахов.');
                 }
             }
         });
     }
 }
 
-function resetGame() {
+function resetGame(notificationText) {
     score = 0;
     misses = 0;
     molesKilled = 0;
     document.getElementById("dead").textContent = molesKilled; // Сбрасываем отображение убитых кротов
     document.getElementById("lost").textContent = misses; // Сбрасываем отображение промахов
+    
+    // Вызов alert с текстом уведомления
+    if (notificationText) {
+        alert(notificationText);
+    }
 }
 
 startGame();
