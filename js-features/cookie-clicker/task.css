@@ -1,8 +1,0 @@
-<style>
-    #cookie {
-        transition: transform 0.2s; /* Плавный переход */
-    }
-    .enlarged {
-        transform: scale(1.2); /* Увеличиваем размер изображения */
-    }
-</style>
