@@ -1,30 +1,45 @@
-function startTimer(seconds) {
-    let timerElement = document.getElementById('timer');
+let score = 0;
+let clicks = 0;
+let lastClickTime = Date.now();
 
-    let timer = setInterval(function() {
-        let hours = Math.floor(seconds / 3600);
-        let minutes = Math.floor((seconds % 3600) / 60);
-        let remainingSeconds = seconds % 60;
+const clickerCounter = document.getElementById("clicker__counter");
+const scoreDisplay = document.getElementById("score");
+const clickSpeedDisplay = document.getElementById("clickSpeed");
+const cookie = document.getElementById("cookie");
 
-        // Добавляем ведущие нули, если необходимо
-        hours = String(hours).padStart(2, '0');
-        minutes = String(minutes).padStart(2, '0');
-        remainingSeconds = String(remainingSeconds).padStart(2, '0');
+// Устанавливаем плавный переход для трансформации
+cookie.style.transition = "transform 0.2s";
 
-        // Формируем строку для отображения времени
-        let timerString = `${hours}:${minutes}:${remainingSeconds}`;
-        
-        // Обновляем текст в элементе на странице
-        timerElement.textContent = timerString;
+function clickCookie() {
+    const currentTime = Date.now();
+    const timeDifference = (currentTime - lastClickTime) / 1000; // переводим в секунды
 
-        if (seconds <= 0) {
-            clearInterval(timer);
-            alert("Вы победили в конкурсе!");
-        }
+    clicks++;
+    score += clicks % 2 === 0 ? -1 : 1; // чередуем увеличение и уменьшение счётчика
 
-        seconds--;
-    }, 1000);
+    // Обновляем отображение количества кликов и счёта
+    clickerCounter.textContent = clicks;
+    scoreDisplay.textContent = score;
+
+    if (timeDifference > 0) {
+        const clickSpeed = Math.round(1 / timeDifference * 10) / 10; // округляем до одного знака после запятой
+        // Обновляем отображение скорости кликов
+        clickSpeedDisplay.textContent = clickSpeed;
+    }
+
+    lastClickTime = currentTime;
+
+    // Увеличиваем изображение
+    cookie.style.transform = "scale(1.2)";
+
+    // Убираем увеличение через 200 миллисекунд
+    setTimeout(() => {
+        cookie.style.transform = "scale(1)";
+    }, 200);
 }
 
-// Запускаем таймер при загрузке страницы
-startTimer(59); // Здесь указывается количество секунд, с которого начинается отсчет
+// Привязываем функцию clickCookie к клику по изображению
+cookie.addEventListener("click", clickCookie);
+
+
+
