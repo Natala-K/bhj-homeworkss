@@ -22,12 +22,12 @@ function clickCookie() {
 
     // Увеличиваем изображение
     cookie.width = originalWidth + increaseAmount;
-    cookie.height = originalHeight + increaseAmount;
+    
 
     // Возвращаем изображение к исходным размерам через 100 мс
     setTimeout(() => {
         cookie.width = originalWidth;
-        cookie.height = originalHeight;
+    
     }, 100);
 
     lastClickTime = currentTime;
