@@ -1,6 +1,6 @@
 .reveal {
   opacity: 0;
-  transition: 0.3s opacity ease-in-out;
+  transition: 0.9s opacity ease-in-out;
   background: orange;
   padding: 20px;
   min-height: 200px;
