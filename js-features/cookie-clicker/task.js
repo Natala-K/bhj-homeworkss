@@ -3,6 +3,7 @@ let lastClickTime = Date.now();
 
 const clickerCounter = document.getElementById("clicker__counter");
 const cookie = document.getElementById("cookie");
+const clickerSpeed = document.getElementById("clicker__speed");
 
 // Исходные размеры изображения
 const originalWidth = cookie.width;
@@ -20,14 +21,18 @@ function clickCookie() {
     // Обновляем отображение количества кликов
     clickerCounter.textContent = clicks;
 
+    // Вычисляем скорость кликов и обновляем отображение
+    if (timeDifference > 0) {
+        const clickSpeed = (1 / timeDifference).toFixed(2);
+        clickerSpeed.textContent = clickSpeed;
+    }
+
     // Увеличиваем изображение
     cookie.width = originalWidth + increaseAmount;
-    
 
     // Возвращаем изображение к исходным размерам через 100 мс
     setTimeout(() => {
         cookie.width = originalWidth;
-    
     }, 100);
 
     lastClickTime = currentTime;
