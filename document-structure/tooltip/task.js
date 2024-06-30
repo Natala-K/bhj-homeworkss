@@ -4,32 +4,50 @@ document.addEventListener('DOMContentLoaded', () => {
     tooltips.forEach(tooltip => {
         tooltip.addEventListener('click', (event) => {
             event.preventDefault();
+            
+            // Remove any existing tooltip
+            document.querySelectorAll('.tooltip').forEach(tip => tip.remove());
 
-            // Удалить существующие подсказки
-            document.querySelectorAll('.tooltip').forEach(existingTooltip => existingTooltip.remove());
+            // Create a new tooltip
+            const newTooltip = document.createElement('div');
+            newTooltip.className = 'tooltip';
+            newTooltip.textContent = tooltip.getAttribute('title');
+            
+            const position = tooltip.getAttribute('data-position') || 'top';
+            newTooltip.setAttribute('data-position', position);
 
-            // Создать и добавить новую подсказку
-            const tooltipText = tooltip.getAttribute('title');
-            const tooltipPosition = tooltip.getAttribute('data-position') || 'top';
-            const tooltipElement = document.createElement('div');
-            tooltipElement.className = 'tooltip';
-            tooltipElement.textContent = tooltipText;
-            document.body.appendChild(tooltipElement);
-
-            // Получить координаты элемента и размеры подсказки
+            document.body.appendChild(newTooltip);
+            
+            // Calculate position
             const rect = tooltip.getBoundingClientRect();
-            const tooltipRect = tooltipElement.getBoundingClientRect();
-
-            // Рассчитать положение подсказки
-            let top, left;
-            switch (tooltipPosition) {
+            switch (position) {
                 case 'top':
-                    top = rect.top - tooltipRect.height;
-                    left = rect.left + (rect.width - tooltipRect.width) / 2;
+                    newTooltip.style.left = `${rect.left + rect.width / 2}px`;
+                    newTooltip.style.top = `${rect.top - newTooltip.offsetHeight}px`;
+                    break;
+                case 'right':
+                    newTooltip.style.left = `${rect.right}px`;
+                    newTooltip.style.top = `${rect.top + rect.height / 2}px`;
                     break;
                 case 'bottom':
-                    top = rect.bottom;
-                    left = rect.left + (rect.width - tooltipRect.width) / 2;
+                    newTooltip.style.left = `${rect.left + rect.width / 2}px`;
+                    newTooltip.style.top = `${rect.bottom}px`;
                     break;
                 case 'left':
-                    top = rect.top + (rect.height - toolti
+                    newTooltip.style.left = `${rect.left - newTooltip.offsetWidth}px`;
+                    newTooltip.style.top = `${rect.top + rect.height / 2}px`;
+                    break;
+            }
+            
+            // Show the tooltip
+            newTooltip.style.display = 'block';
+
+            // Hide the tooltip when clicking anywhere else
+            document.addEventListener('click', (e) => {
+                if (!tooltip.contains(e.target) && !newTooltip.contains(e.target)) {
+                    newTooltip.remove();
+                }
+            }, { once: true });
+        });
+    });
+});
