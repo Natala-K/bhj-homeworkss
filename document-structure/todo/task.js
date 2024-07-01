@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
         const taskElement = createTaskElement(taskText);
-        tasksList.appendChild(taskElement);
+        tasksList.insertAdjacentHTML('beforeend', taskElement);
 
         saveTasks();
         taskInput.value = '';
@@ -24,28 +24,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function createTaskElement(taskText) {
-        const task = document.createElement('div');
-        task.classList.add('task');
-
-        const taskTitle = document.createElement('div');
-        taskTitle.classList.add('task__title');
-        taskTitle.textContent = taskText;
-
-        const taskRemove = document.createElement('a');
-        taskRemove.classList.add('task__remove');
-        taskRemove.href = '#';
-        taskRemove.textContent = '×';
-
-        taskRemove.addEventListener('click', (event) => {
-            event.preventDefault();
-            removeTask(task);
-        });
-
-        task.appendChild(taskTitle);
-        task.appendChild(taskRemove);
-
-        return task;
+        return `
+            <div class="task">
+                <div class="task__title">
+                    ${taskText}
+                </div>
+                <a href="#" class="task__remove">&times;</a>
+            </div>
+        `;
     }
+
+    tasksList.addEventListener('click', (event) => {
+        if (event.target.classList.contains('task__remove')) {
+            event.preventDefault();
+            const taskElement = event.target.closest('.task');
+            removeTask(taskElement);
+        }
+    });
 
     function removeTask(taskElement) {
         taskElement.remove();
@@ -64,7 +59,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         tasks.forEach((taskText) => {
             const taskElement = createTaskElement(taskText);
-            tasksList.appendChild(taskElement);
+            tasksList.insertAdjacentHTML('beforeend', taskElement);
         });
     }
 });
